@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система быстрых платежей (СБП) | Оплата</title>
+    <style>
+        /* إعدادات الألوان المتغيرة لدعم الوضع الليلي والنهاري تلقائياً */
+        :root {
+            --bg-body: #f4f5f7;
+            --bg-frame: #ffffff;
+            --text-primary: #1c1c1e;
+            --text-secondary: #8e8e93;
+            --text-title: #1c3144;
+            --bg-input: #f2f2f7;
+            --bg-copy: #f8f9fa;
+            --border-color: #e5e5ea;
+            --border-dash: #d1d1d6;
+            --toast-bg: #1c1c1e;
+            --toast-text: #ffffff;
+        }
+
+        /* الوضع الليلي التلقائي */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #000000;
+                --bg-frame: #1c1c1e;
+                --text-primary: #ffffff;
+                --text-secondary: #98989d;
+                --text-title: #ffffff;
+                --bg-input: #2c2c2e;
+                --bg-copy: #2c2c2e;
+                --border-color: #38383a;
+                --border-dash: #48484a;
+                --toast-bg: #38383a;
+                --toast-text: #ffffff;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg-body); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            color: var(--text-primary);
+            padding: 20px 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* الإطار الاحترافي الذكي */
+        .phone-frame {
+            background-color: var(--bg-frame);
+            width: 100%;
+            max-width: 420px;
+            min-height: 880px;
+            border-radius: 36px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+            padding: 30px 20px 35px 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .close-btn { 
+            position: absolute; top: 24px; right: 24px; width: 28px; height: 28px; 
+            background-color: var(--bg-input); border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; color: var(--text-secondary); 
+            font-size: 13px; cursor: pointer; z-index: 10;
+        }
+
+        /* الهيدر والعداد */
+        .logo-container { display: flex; flex-direction: column; align-items: center; margin-top: 10px; margin-bottom: 20px; text-align: center; }
+        .sbp-logo-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .sbp-main-img-svg { width: 62px; height: 62px; }
+        .sbp-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+        .sbp-main-title { font-size: 34px; font-weight: 900; color: var(--text-title); letter-spacing: -0.5px; text-transform: lowercase; }
+        .sbp-subtitle { font-size: 10px; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .timer-badge {
+            display: flex; align-items: center; gap: 6px; background-color: rgba(255, 59, 48, 0.1);
+            color: #ff3b30; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+            margin-bottom: 20px; align-self: center;
+        }
+        .timer-icon { width: 14px; height: 14px; fill: currentColor; }
+
+        .prompt-text { font-size: 16px; font-weight: 600; color: var(--text-primary); text-align: center; margin-bottom: 20px; }
+
+        /* شريط البحث */
+        .search-container { width: 100%; margin-bottom: 22px; position: relative; }
+        .search-input { 
+            width: 100%; height: 48px; background-color: var(--bg-input); border: 1px solid transparent; 
+            border-radius: 14px; padding: 0 40px 0 16px; font-size: 16px; outline: none; 
+            color: var(--text-primary); transition: all 0.2s ease; 
+        }
+        .search-input:focus { border-color: #007aff; }
+        .clear-search-btn {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; 
+            background-color: var(--text-secondary); color: var(--bg-frame); border-radius: 50%; display: none;
+            justify-content: center; align-items: center; font-size: 10px; cursor: pointer; font-weight: bold;
+        }
+
+        /* قائمة البنوك - الستايل الشفاف بالتدرجات الحديثة */
+        .banks-list { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .bank-item { 
+            width: 100%; height: 68px; border-radius: 18px; display: flex; align-items: center; 
+            padding: 0 18px; text-decoration: none; position: relative; overflow: hidden;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.2s ease;
+        }
+        .bank-item:active { transform: scale(0.97); }
+        
+        .bank-icon-wrapper { 
+            width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; 
+            align-items: center; margin-right: 14px; flex-shrink: 0; font-weight: bold; 
+            background-color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        .bank-name { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; color: var(--text-primary); }
+        
+        /* تدرجات ألوان الأزرار */
+        /* Sberbank */
+        .btn-sber { 
+            background: linear-gradient(135deg, rgba(20, 162, 54, 0.12) 0%, rgba(20, 162, 54, 0.03) 100%);
+            border: 1.5px solid rgba(20, 162, 54, 0.3);
+        }
+        .icon-sber { color: #14a236; font-size: 22px; }
+        
+        /* Ozon */
+        .btn-ozon { 
+            background: linear-gradient(135deg, rgba(0, 91, 255, 0.12) 0%, rgba(0, 91, 255, 0.03) 100%);
+            border: 1.5px solid rgba(0, 91, 255, 0.3);
+        }
+        .icon-ozon { color: #005bff; font-weight: 900; font-size: 11px; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1; text-transform: lowercase; }
+        .icon-ozon span { font-size: 7px; font-weight: 600; text-transform: none; margin-top: -1px; }
+
+        /* Alfa-Bank */
+        .btn-alfa { 
+            background: linear-gradient(135deg, rgba(239, 49, 36, 0.12) 0%, rgba(239, 49, 36, 0.03) 100%);
+            border: 1.5px solid rgba(239, 49, 36, 0.3);
+        }
+        .icon-alfa { color: #ef3124; font-weight: 900; font-size: 22px; font-family: 'Arial Black', sans-serif; }
+        
+        /* ВТБ Банк */
+        .btn-vtb { 
+            background: linear-gradient(135deg, rgba(0, 68, 187, 0.12) 0%, rgba(0, 68, 187, 0.03) 100%);
+            border: 1.5px solid rgba(0, 68, 187, 0.3);
+        }
+        .icon-vtb { color: #0044bb; font-weight: 900; font-size: 15px; }
+
+        /* Газпромбанк */
+        .btn-gazprom { 
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.12) 0%, rgba(0, 122, 255, 0.03) 100%);
+            border: 1.5px solid rgba(0, 122, 255, 0.3);
+        }
+        .icon-gazprom { color: #007aff; font-weight: 900; font-size: 16px; font-family: sans-serif; }
+
+        /* T-Bank */
+        .btn-tbank { 
+            background: linear-gradient(135deg, rgba(255, 221, 45, 0.2) 0%, rgba(255, 221, 45, 0.05) 100%);
+            border: 1.5px solid rgba(255, 204, 0, 0.4);
+        }
+        .icon-tbank { color: #ffdd2d; background-color: #000; font-family: serif; font-weight: 900; font-size: 22px; }
+
+        /* تأثير التحميل (Spinner) */
+        .spinner {
+            width: 24px; height: 24px; border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%; border-top-color: var(--text-primary);
+            animation: spin 0.8s linear infinite; margin: auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* شاشة التحميل الوهمية */
+        .skeleton-overlay {
+            position: absolute; top: 200px; left: 20px; right: 20px; bottom: 120px;
+            background: var(--bg-frame); display: flex; flex-direction: column; gap: 12px;
+            z-index: 5; transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .skeleton-card {
+            width: 100%; height: 68px; border-radius: 18px;
+            background: linear-gradient(90deg, var(--bg-input) 25%, var(--border-color) 50%, var(--bg-input) 75%);
+            background-size: 200% 100%; animation: loadingSkeleton 1.4s infinite;
+        }
+        @keyframes loadingSkeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* قسم النسخ المطور */
+        .copy-section { 
+            width: 100%; background-color: var(--bg-copy); padding: 18px 16px; 
+            border-radius: 20px; border: 1px dashed var(--border-dash); 
+            display: flex; flex-direction: column; align-items: center; margin-top: auto; 
+        }
+        .copy-title { font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-bottom: 12px; line-height: 1.4; text-align: center; }
+        .copy-box { 
+            display: flex; align-items: center; justify-content: space-between; width: 100%; 
+            background-color: var(--bg-frame); padding: 10px 12px; border-radius: 14px; 
+            border: 1px solid var(--border-color);
+        }
+        .copy-info-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+        .client-name { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+        
+        /* التعديل 1: إلغاء اللون الأزرق المزعج في الدارك مود وجعله دائماً متناسق ومريح للعين باللون الأساسي للموقع */
+        .copy-number { font-size: 17px; font-weight: 800; color: var(--text-primary) !important; letter-spacing: -0.2px; }
+        
+        .copy-btn { 
+            background: linear-gradient(135deg, #007aff, #0056b3); 
+            color: #ffffff; border: none; border-radius: 10px; padding: 10px 14px; 
+            font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; 
+            display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+        }
+        .copy-btn:active { transform: scale(0.95); }
+        .copy-btn.copied { background: linear-gradient(135deg, #34c759, #28a745); box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2); }
+        .copy-icon { width: 14px; height: 14px; fill: currentColor; }
+
+        /* مؤشر الأمان */
+        .trust-indicator { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); margin-top: 14px; font-weight: 500; }
+        .lock-icon { width: 12px; height: 12px; fill: currentColor; }
+
+        /* الإشعار المنبثق - التعديل 2: مخفي تماماً ومؤمن برمجياً لتجنب أي ظهور تلقائي إلا عند الضغط */
+        .toast-notification {
+            position: absolute; bottom: -80px; left: 50%; transform: translateX(-50%);
+            background-color: var(--toast-bg); color: var(--toast-text); padding: 12px 24px;
+            border-radius: 25px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: -100; opacity: 0; display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast-notification.show { bottom: 30px; z-index: 100; opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <div class="close-btn">✕</div>
+        
+        <!-- HEADER -->
+        <div class="logo-container">
+            <div class="sbp-logo-wrapper">
+                <svg class="sbp-main-img-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 65 L35 35 L50 50 L35 80 Z" fill="#5856D6" opacity="0.85"/>
+                    <path d="M35 35 L65 35 L50 50 L20 65 Z" fill="#007AFF" opacity="0.9"/>
+                    <path d="M50 20 L65 50 L50 50 L35 35 Z" fill="#FFCC00" opacity="0.9"/>
+                    <path d="M65 50 L80 35 L50 20 L50 50 Z" fill="#FF9500" opacity="0.85"/>
+                    <path d="M50 50 L65 50 L50 80 L35 80 Z" fill="#34C759" opacity="0.9"/>
+                    <path d="M65 50 L80 65 L50 80 L65 50 Z" fill="#4CD964" opacity="0.85"/>
+                    <path d="M50 50 L35 35 L50 20 L65 35 Z" fill="#FFCC00" opacity="0.3"/>
+                    <path d="M35 35 L50 50 L35 80 L20 65 Z" fill="#007AFF" opacity="0.2"/>
+                    <path d="M50 15 L85 50 L50 85 L15 50 Z" stroke="currentColor" stroke-width="1" stroke-dasharray="1 3" opacity="0.2"/>
+                </svg>
+                <div class="sbp-text">
+                    <span class="sbp-main-title">сбп</span>
+                    <span class="sbp-subtitle">система быстрых<br>платежей</span>
+                </div>
+            </div>
+            
+            <div class="timer-badge">
+                <svg class="timer-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                Время на оплату: <span id="countdownTimer">15:00</span>
+            </div>
+        </div>
+
+        <p class="prompt-text">Выберите банк для подтверждения оплаты</p>
+
+        <!-- SEARCH INPUT -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Введите название банка" id="bankSearch">
+            <div class="clear-search-btn" id="clearSearch">✕</div>
+        </div>
+
+        <!-- SKELETON LOADER -->
+        <div class="skeleton-overlay" id="skeletonLoader">
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
+        </div>
+
+        <!-- BANKS LIST (تم تعديل الترتيب وإضافة البنوك الجديدة بالكامل هنا) -->
+        <div class="banks-list" id="banksList">
+            
+            <!-- 1. Сбербанк -->
+            <a href="https://www.sberbank.com/sms/pbpn?requisiteNumber=79371173474" class="bank-item btn-sber" data-name="сбербанк sberbank">
+                <div class="bank-icon-wrapper icon-sber">
+                    <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                        <defs><linearGradient id="sberNewGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00a3e0"/><stop offset="50%" stop-color="#2bb34b"/><stop offset="100%" stop-color="#f2cf00"/></linearGradient></defs>
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="url(#sberNewGrad)" stroke-width="9"/>
+                        <path d="M38 52 L47 61 L68 36" fill="none" stroke="#2bb34b" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="bank-name">Сбербанк</div>
+            </a>
+            
+            <!-- 2. Ozon Банк (تم نقله للمركز الثاني بعد سبربرانك مباشرة) -->
+            <a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/019e468e-290d-7862-b438-d55d452a529f" class="bank-item btn-ozon" data-name="озон банк ozon bank">
+                <div class="bank-icon-wrapper icon-ozon">ozon<span>банк</span></div>
+                <div class="bank-name">Ozon Банк</div>
+            </a>
+
+            <!-- 3. Alfa-Bank (الرابط المحدث المستبدل) -->
+            <a href="https://c2c.cbrpay.ru/AS1I001QU1PG821L8CM9MAS0RS1EO65K" class="bank-item btn-alfa" data-name="альфа-банк alfa-bank">
+                <div class="bank-icon-wrapper icon-alfa">А</div>
+                <div class="bank-name">АЛЬФА-БАНК</div>
+            </a>
+
+            <!-- 4. ВТБ Банк -->
+            <a href="https://c2c.cbrpay.ru/AS1I001QU1PG821L8CM9MAS0RS1EO65K" class="bank-item btn-vtb" data-name="втб банк vtb bank">
+                <div class="bank-icon-wrapper icon-vtb">ВТБ</div>
+                <div class="bank-name">ВТБ Банк</div>
+            </a>
+
+            <!-- 5. Газпромбанк (البنك الجديد المضاف بالرابط والستايل المتناسق) -->
+            <a href="https://c2c.cbrpay.ru/AS1I001QU1PG821L8CM9MAS0RS1EO65K" class="bank-item btn-gazprom" data-name="газпромбанк gazprombank газпром">
+                <div class="bank-icon-wrapper icon-gazprom">ГПБ</div>
+                <div class="bank-name">Газпромбанк</div>
+            </a>
+
+            <!-- 6. Т-Банк (تم نقله ليصبح الأخير تماماً في نهاية القائمة) -->
+            <a href="https://www.tinkoff.ru/rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615" class="bank-item btn-tbank" data-name="т-банк тинькофф t-bank tinkoff">
+                <div class="bank-icon-wrapper icon-tbank">Т</div>
+                <div class="bank-name">Т-Банк</div>
+            </a>
+
+        </div>
+
+        <!-- COPY ACCOUNT BOX -->
+        <div class="copy-section">
+            <div class="copy-title">Скопируйте номер и переведите средства через ваше банковское приложение</div>
+            <div class="copy-box">
+                <div class="copy-info-text">
+                    <span class="client-name">Хамед Махмуд Х.</span>
+                    <span class="copy-number" id="targetNumber">+7 (937) 117-34-74</span>
+                </div>
+                <button class="copy-btn" id="copyBtn" onclick="copyNumber()">
+                    <svg class="copy-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    Копировать
+                </button>
+            </div>
+            
+            <!-- TRUST INDICATOR -->
+            <div class="trust-indicator">
+                <svg class="lock-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                Безопасный перевод через систему СБП
+            </div>
+        </div>
+
+        <!-- TOAST NOTIFICATION -->
+        <div class="toast-notification" id="toastNotice">
+            <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:#34c759;"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            Номер успешно скопирован
+        </div>
+
+    </div>
+
+    <script>
+        // Skeleton Loader
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('skeletonLoader');
+                loader.style.opacity = '0';
+                loader.style.transform = 'scale(0.98)';
+                setTimeout(() => loader.style.display = 'none', 300);
+            }, 750);
+        });
+
+        // Timer
+        let time = 15 * 60;
+        const timerEl = document.getElementById('countdownTimer');
+        setInterval(() => {
+            let m = Math.floor(time / 60);
+            let s = time % 60;
+            m = m < 10 ? '0' + m : m;
+            s = s < 10 ? '0' + s : s;
+            timerEl.innerText = `${m}:${s}`;
+            if(time > 0) time--;
+        }, 1000);
+
+        // Smart Search
+        const searchInput = document.getElementById('bankSearch');
+        const clearSearch = document.getElementById('clearSearch');
+
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            clearSearch.style.display = query ? 'flex' : 'none';
+            document.querySelectorAll('.bank-item').forEach(item => {
+                item.style.display = item.getAttribute('data-name').includes(query) ? 'flex' : 'none';
+            });
+        });
+
+        clearSearch.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearch.style.display = 'none';
+            document.querySelectorAll('.bank-item').forEach(item => item.style.display = 'flex');
+            searchInput.focus();
+        });
+
+        // Loading Spinner on click
+        document.querySelectorAll('.bank-item').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('href');
+                if (navigator.vibrate) navigator.vibrate(50);
+                
+                this.innerHTML = `<div class="spinner"></div>`;
+                this.style.justifyContent = 'center';
+                
+                setTimeout(() => {
+                    if (this.dataset.name.includes('tinkoff')) {
+                        window.location.href = 'tinkoff://rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615';
+                    } else {
+                        window.location.href = url;
+                    }
+                }, 800);
+            });
+        });
+
+        // Copy Feature
+        function copyNumber() {
+            if (navigator.vibrate) navigator.vibrate(40);
+            const displayNumber = document.getElementById('targetNumber').innerText;
+            const cleanNumber = displayNumber.replace(/[^\d+]/g, '');
+            
+            navigator.clipboard.writeText(cleanNumber).then(() => {
+                const toast = document.getElementById('toastNotice');
+                toast.classList.add('show');
+                
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<svg class="copy-icon" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg> Скопировано`;
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 2500);
+            }).catch(err => console.error(err));
+        }
+    </script>
+</body>
+</html>
