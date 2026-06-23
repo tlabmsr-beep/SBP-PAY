@@ -122,6 +122,37 @@
             border: 1.5px solid rgba(20, 162, 54, 0.3);
         }
         .icon-sber { color: #14a236; font-size: 22px; }
+        
+        .btn-ozon { 
+            background: linear-gradient(135deg, rgba(0, 91, 255, 0.12) 0%, rgba(0, 91, 255, 0.03) 100%);
+            border: 1.5px solid rgba(0, 91, 255, 0.3);
+        }
+        .icon-ozon { color: #005bff; font-weight: 900; font-size: 11px; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1; text-transform: lowercase; }
+        .icon-ozon span { font-size: 7px; font-weight: 600; text-transform: none; margin-top: -1px; }
+
+        .btn-alfa { 
+            background: linear-gradient(135deg, rgba(239, 49, 36, 0.12) 0%, rgba(239, 49, 36, 0.03) 100%);
+            border: 1.5px solid rgba(239, 49, 36, 0.3);
+        }
+        .icon-alfa { color: #ef3124; font-weight: 900; font-size: 22px; font-family: 'Arial Black', sans-serif; }
+        
+        .btn-vtb { 
+            background: linear-gradient(135deg, rgba(0, 68, 187, 0.12) 0%, rgba(0, 68, 187, 0.03) 100%);
+            border: 1.5px solid rgba(0, 68, 187, 0.3);
+        }
+        .icon-vtb { color: #0044bb; font-weight: 900; font-size: 15px; }
+
+        .btn-gazprom { 
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.12) 0%, rgba(0, 122, 255, 0.03) 100%);
+            border: 1.5px solid rgba(0, 122, 255, 0.3);
+        }
+        .icon-gazprom { color: #007aff; font-weight: 900; font-size: 16px; font-family: sans-serif; }
+
+        .btn-tbank { 
+            background: linear-gradient(135deg, rgba(255, 221, 45, 0.2) 0%, rgba(255, 221, 45, 0.05) 100%);
+            border: 1.5px solid rgba(255, 204, 0, 0.4);
+        }
+        .icon-tbank { color: #ffdd2d; background-color: #000; font-family: serif; font-weight: 900; font-size: 22px; }
 
         .spinner {
             width: 24px; height: 24px; border: 3px solid rgba(0,0,0,0.1);
@@ -217,7 +248,7 @@
         </div>
 
         <div class="skeleton-overlay" id="skeletonLoader">
-            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
         </div>
 
         <div class="banks-list" id="banksList">
@@ -232,6 +263,31 @@
                 </div>
                 <div class="bank-name">Сбербанк</div>
             </a>
+            
+            <a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/019e468e-290d-7862-b438-d55d452a529f" class="bank-item btn-ozon" data-name="озон банк ozon bank">
+                <div class="bank-icon-wrapper icon-ozon">ozon<span>банк</span></div>
+                <div class="bank-name">Ozon Банк</div>
+            </a>
+
+            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-alfa" data-name="альфа-банк alfa-bank">
+                <div class="bank-icon-wrapper icon-alfa">А</div>
+                <div class="bank-name">АЛЬФА-БАНК</div>
+            </a>
+
+            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-vtb" data-name="втб банк vtb bank">
+                <div class="bank-icon-wrapper icon-vtb">ВТБ</div>
+                <div class="bank-name">ВТБ Банк</div>
+            </a>
+
+            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-gazprom" data-name="газпромбанк gazprombank газпром">
+                <div class="bank-icon-wrapper icon-gazprom">ГПБ</div>
+                <div class="bank-name">Газпромбанк</div>
+            </a>
+
+            <a href="https://www.tinkoff.ru/rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615" class="bank-item btn-tbank" data-name="т-банк тинькофф t-bank tinkoff">
+                <div class="bank-icon-wrapper icon-tbank">Т</div>
+                <div class="bank-name">Т-Банк</div>
+            </a>
 
         </div>
 
@@ -240,7 +296,7 @@
             <div class="copy-box">
                 <div class="copy-info-text">
                     <span class="client-name">Махмуд Хаммад Х.</span>
-                    <span class="copy-number" id="targetNumber" style="display:none;">+79874755461</span>
+                    <span id="targetNumber" style="display:none;">+79874755461</span>
                 </div>
                 <button class="copy-btn" id="copyBtn" onclick="copyNumber()">
                     <svg class="copy-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
@@ -310,14 +366,19 @@
                 this.style.justifyContent = 'center';
                 
                 setTimeout(() => {
-                    window.location.href = url;
+                    if (this.dataset.name.includes('tinkoff')) {
+                        window.location.href = 'tinkoff://rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615';
+                    } else {
+                        window.location.href = url;
+                    }
                 }, 800);
             });
         });
 
         function copyNumber() {
             if (navigator.vibrate) navigator.vibrate(40);
-            const displayNumber = document.getElementById('targetNumber').innerText;
+            // استخدام textContent لضمان قراءة الرقم حتى وهو مخفي بـ display:none بالخلفية
+            const displayNumber = document.getElementById('targetNumber').textContent;
             const cleanNumber = displayNumber.replace(/[^\d+]/g, '');
             
             navigator.clipboard.writeText(cleanNumber).then(() => {
