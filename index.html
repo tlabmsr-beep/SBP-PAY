@@ -225,7 +225,7 @@
 
         <div class="banks-list" id="banksList">
             
-            <a href="https://www.sberbank.com/sms/pbpn?requisiteNumber=79874755461" class="bank-item btn-sber" data-name="сбербанк sberbank">
+            <a href="#" class="bank-item btn-sber" data-name="сбербанк sberbank">
                 <div class="bank-icon-wrapper icon-sber">
                     <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
                         <defs><linearGradient id="sberNewGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00a3e0"/><stop offset="50%" stop-color="#2bb34b"/><stop offset="100%" stop-color="#f2cf00"/></linearGradient></defs>
@@ -264,7 +264,6 @@
         </div>
 
         <div class="copy-section">
-            
             <div class="trust-indicator">
                 <svg class="lock-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
                 Безопасный перевод через систему СБП
@@ -314,8 +313,14 @@
 
         document.querySelectorAll('.bank-item').forEach(btn => {
             btn.addEventListener('click', function(e) {
-                e.preventDefault();
                 const url = this.getAttribute('href');
+                
+                if (!url || url === '#') {
+                    e.preventDefault();
+                    return; 
+                }
+                
+                e.preventDefault();
                 if (navigator.vibrate) navigator.vibrate(50);
                 
                 this.innerHTML = `<div class="spinner"></div>`;
@@ -334,8 +339,3 @@
 </body>
 </html>
 """
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(final_html_hidden_copy)
-
-print("Updated text and structural tags successfully inside index.html")}
