@@ -61,6 +61,7 @@
             position: relative;
             border: 1px solid var(--border-color);
             transition: background-color 0.3s ease, border-color 0.3s ease;
+            overflow: hidden; /* عشان النافذة المنبثقة تاخد نفس انحناء الإطار */
         }
 
         .close-btn { 
@@ -208,6 +209,56 @@
             transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: -100; opacity: 0; display: flex; align-items: center; gap: 8px; white-space: nowrap;
         }
         .toast-notification.show { bottom: 30px; z-index: 100; opacity: 1; }
+
+        /* Modal Overlay Styles (تصميم النافذة المنبثقة) */
+        .modal-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 1000; border-radius: 36px;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        
+        .modal-content {
+            background: var(--bg-frame); width: 88%; border-radius: 24px;
+            padding: 24px 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center; position: relative;
+            transform: translateY(20px) scale(0.95); opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--border-color);
+        }
+        .modal-overlay.show .modal-content { transform: translateY(0) scale(1); opacity: 1; }
+        
+        .modal-close {
+            position: absolute; top: 16px; right: 16px; width: 28px; height: 28px;
+            background: var(--bg-input); border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; color: var(--text-secondary);
+            font-size: 14px; cursor: pointer; transition: background 0.2s;
+        }
+        .modal-close:active { background: var(--border-color); }
+        
+        .modal-title { font-size: 19px; font-weight: 800; margin-bottom: 12px; color: var(--text-primary); letter-spacing: -0.3px; }
+        .modal-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; line-height: 1.45; }
+        .modal-desc b { color: var(--text-primary); }
+        
+        .modal-details { background: var(--bg-input); border-radius: 16px; padding: 16px; text-align: left; margin-bottom: 22px; border: 1px solid var(--border-color); }
+        .modal-detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 14px; }
+        .modal-detail-row:last-child { margin-bottom: 0; }
+        .modal-label { color: var(--text-secondary); font-weight: 500;}
+        .modal-value { font-weight: 700; color: var(--text-primary); text-align: right; }
+        
+        .modal-copy-btn {
+            width: 100%; background: linear-gradient(135deg, #007aff, #0056b3);
+            color: #ffffff; border: none; border-radius: 14px; padding: 14px; font-size: 16px;
+            font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            box-shadow: 0 6px 16px rgba(0, 122, 255, 0.25);
+        }
+        .modal-copy-btn:active { transform: scale(0.96); }
+        .modal-copy-btn.copied { background: linear-gradient(135deg, #34c759, #28a745); box-shadow: 0 6px 16px rgba(52, 199, 89, 0.25); }
     </style>
 </head>
 <body>
@@ -218,7 +269,7 @@
         <!-- HEADER -->
         <div class="logo-container">
             <div class="sbp-logo-wrapper">
-                <svg class="sbp-main-img-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="sbp-main-img-svg" viewBox="0 0 100 100" fill="none" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
                     <path d="M20 65 L35 35 L50 50 L35 80 Z" fill="#5856D6" opacity="0.85"/>
                     <path d="M35 35 L65 35 L50 50 L20 65 Z" fill="#007AFF" opacity="0.9"/>
                     <path d="M50 20 L65 50 L50 50 L35 35 Z" fill="#FFCC00" opacity="0.9"/>
@@ -257,7 +308,7 @@
         <!-- BANKS LIST -->
         <div class="banks-list" id="banksList">
             
-            <!-- 1. Сбербанк (يفتح تطبيق سبير للتحويل إلى يوموني) -->
+            <!-- 1. Сбербанк (يفتح النافذة المنبثقة) -->
             <a href="#" class="bank-item btn-sber" id="sberBtn" data-name="сбербанк sberbank">
                 <div class="bank-icon-wrapper icon-sber">
                     <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
@@ -270,31 +321,31 @@
             </a>
             
             <!-- 2. Ozon Банк -->
-            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-ozon" data-name="озон банк ozon bank">
+            <a href="[https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126](https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126)" class="bank-item btn-ozon" data-name="озон банк ozon bank">
                 <div class="bank-icon-wrapper icon-ozon">ozon<span>банк</span></div>
                 <div class="bank-name">Ozon Банк</div>
             </a>
 
             <!-- 3. Alfa-Bank -->
-            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-alfa" data-name="альфа-банк alfa-bank">
+            <a href="[https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126](https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126)" class="bank-item btn-alfa" data-name="альфа-банк alfa-bank">
                 <div class="bank-icon-wrapper icon-alfa">А</div>
                 <div class="bank-name">АЛЬФА-БАНК</div>
             </a>
 
             <!-- 4. ВТБ Банк -->
-            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-vtb" data-name="втб банк vtb bank">
+            <a href="[https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126](https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126)" class="bank-item btn-vtb" data-name="втб банк vtb bank">
                 <div class="bank-icon-wrapper icon-vtb">ВТБ</div>
                 <div class="bank-name">ВТБ Банк</div>
             </a>
 
             <!-- 5. Газпромбанк -->
-            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-gazprom" data-name="газпромбанк gazprombank газпром">
+            <a href="[https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126](https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126)" class="bank-item btn-gazprom" data-name="газпромбанк gazprombank газпром">
                 <div class="bank-icon-wrapper icon-gazprom">ГПБ</div>
                 <div class="bank-name">Газпромбанк</div>
             </a>
 
             <!-- 6. Т-Банк -->
-            <a href="https://www.tinkoff.ru/rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615" class="bank-item btn-tbank" data-name="т-банк тинькофф t-bank tinkoff">
+            <a href="[https://www.tinkoff.ru/rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615](https://www.tinkoff.ru/rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615)" class="bank-item btn-tbank" data-name="т-банк тинькофф t-bank tinkoff">
                 <div class="bank-icon-wrapper icon-tbank">Т</div>
                 <div class="bank-name">Т-Банк</div>
             </a>
@@ -322,9 +373,39 @@
             </div>
         </div>
 
+        <!-- TOAST NOTIFICATION -->
         <div class="toast-notification" id="toastNotice">
             <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:#34c759;"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
             <span id="toastText">Номер успешно скопирован</span>
+        </div>
+
+        <!-- MODAL OVERLAY (النافذة المنبثقة لسبير بنك) -->
+        <div class="modal-overlay" id="paymentModal">
+            <div class="modal-content">
+                <div class="modal-close" onclick="closeModal()">✕</div>
+                <div class="modal-title">Инструкция по оплате</div>
+                <div class="modal-desc">Скопируйте номер телефона, откройте приложение <b>любого банка</b> и переведите нужную сумму по СБП на банк <b>ЮMoney (ЮМани)</b>.</div>
+                
+                <div class="modal-details">
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Получатель:</span>
+                        <span class="modal-value">Махмуд Хаммад Х.</span>
+                    </div>
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Банк:</span>
+                        <span class="modal-value">ЮMoney (ЮМани)</span>
+                    </div>
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Номер:</span>
+                        <span class="modal-value" style="font-size: 16px;">+7 (996) 065-61-74</span>
+                    </div>
+                </div>
+
+                <button class="modal-copy-btn" id="modalCopyBtn" onclick="copyFromModal()">
+                    <svg class="copy-icon" viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    Скопировать номер
+                </button>
+            </div>
         </div>
 
     </div>
@@ -368,28 +449,49 @@
             searchInput.focus();
         });
 
-        // Event listener for Sberbank button to handle the YooMoney flow
+        // النافذة المنبثقة عند الضغط على سبير بنك
+        const modal = document.getElementById('paymentModal');
+
         document.getElementById('sberBtn').addEventListener('click', function(e) {
             e.preventDefault();
             if (navigator.vibrate) navigator.vibrate(50);
             
-            const rawNum = document.getElementById('rawNumber').innerText;
-            navigator.clipboard.writeText(rawNum).catch(err => console.error(err));
-
-            const toast = document.getElementById('toastNotice');
-            document.getElementById('toastText').innerText = 'Номер скопирован! Выберите ЮMoney';
-            toast.classList.add('show');
-            
+            const originalContent = this.innerHTML;
             this.innerHTML = `<div class="spinner"></div>`;
             this.style.justifyContent = 'center';
             
             setTimeout(() => {
-                toast.classList.remove('show');
-                window.location.href = 'sberbankonline://';
-            }, 1800);
+                this.innerHTML = originalContent; 
+                this.style.justifyContent = '';
+                
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('show'), 10);
+            }, 400);
         });
 
-        // General event listener for other banks
+        function closeModal() {
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function copyFromModal() {
+            if (navigator.vibrate) navigator.vibrate(40);
+            const rawNum = "79960656174"; 
+            
+            navigator.clipboard.writeText(rawNum).then(() => {
+                const btn = document.getElementById('modalCopyBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<svg class="copy-icon" viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg> Скопировано`;
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 2500);
+            }).catch(err => console.error(err));
+        }
+
+        // باقي البنوك (توجيه مباشر للينك المجمع)
         document.querySelectorAll('.bank-item:not(#sberBtn)').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
