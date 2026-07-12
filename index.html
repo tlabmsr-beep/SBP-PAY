@@ -123,13 +123,6 @@
             border: 1.5px solid rgba(20, 162, 54, 0.3);
         }
         .icon-sber { color: #14a236; font-size: 22px; }
-        
-        .btn-ozon { 
-            background: linear-gradient(135deg, rgba(0, 91, 255, 0.12) 0%, rgba(0, 91, 255, 0.03) 100%);
-            border: 1.5px solid rgba(0, 91, 255, 0.3);
-        }
-        .icon-ozon { color: #005bff; font-weight: 900; font-size: 11px; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1; text-transform: lowercase; }
-        .icon-ozon span { font-size: 7px; font-weight: 600; text-transform: none; margin-top: -1px; }
 
         .btn-alfa { 
             background: linear-gradient(135deg, rgba(239, 49, 36, 0.12) 0%, rgba(239, 49, 36, 0.03) 100%);
@@ -318,32 +311,26 @@
                 </div>
                 <div class="bank-name">Сбербанк</div>
             </a>
-            
-            <!-- 2. Ozon Банк -->
-            <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-ozon" data-name="озон банк ozon bank">
-                <div class="bank-icon-wrapper icon-ozon">ozon<span>банк</span></div>
-                <div class="bank-name">Ozon Банк</div>
-            </a>
 
-            <!-- 3. Alfa-Bank -->
+            <!-- 2. Alfa-Bank -->
             <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-alfa" data-name="альфа-банк alfa-bank">
                 <div class="bank-icon-wrapper icon-alfa">А</div>
                 <div class="bank-name">АЛЬФА-БАНК</div>
             </a>
 
-            <!-- 4. ВТБ Банк -->
+            <!-- 3. ВТБ Банк -->
             <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-vtb" data-name="втб банк vtb bank">
                 <div class="bank-icon-wrapper icon-vtb">ВТБ</div>
                 <div class="bank-name">ВТБ Банк</div>
             </a>
 
-            <!-- 5. Газпромбанк -->
+            <!-- 4. Газпромбанк -->
             <a href="https://c2c.cbrpay.ru/BS1I006NIHP4RIII8HGRUPDTM0DAL126" class="bank-item btn-gazprom" data-name="газпромбанк gazprombank газпром">
                 <div class="bank-icon-wrapper icon-gazprom">ГПБ</div>
                 <div class="bank-name">Газпромбанк</div>
             </a>
 
-            <!-- 6. Т-Банк -->
+            <!-- 5. Т-Банк -->
             <a href="https://www.tinkoff.ru/rm/r_gpEryIjNIz.epxdQWHBWM/9GPXE41615" class="bank-item btn-tbank" data-name="т-банк тинькофф t-bank tinkoff">
                 <div class="bank-icon-wrapper icon-tbank">Т</div>
                 <div class="bank-name">Т-Банк</div>
@@ -377,7 +364,7 @@
             <span id="toastText">Номер успешно скопирован</span>
         </div>
 
-        <!-- MODAL OVERLAY (النافذة المنبثقة لسبير بنك) -->
+        <!-- MODAL OVERLAY -->
         <div class="modal-overlay" id="paymentModal">
             <div class="modal-content">
                 <div class="modal-close" onclick="closeModal()">✕</div>
