@@ -65,7 +65,6 @@
 
         .logo-container { display: flex; flex-direction: column; align-items: center; margin-top: 10px; margin-bottom: 25px; text-align: center; }
         .sbp-logo-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-        .sbp-main-img-svg { width: 62px; height: 62px; }
         .sbp-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
         .sbp-main-title { font-size: 34px; font-weight: 900; color: var(--text-title); letter-spacing: -0.5px; text-transform: lowercase; }
         .sbp-subtitle { font-size: 10px; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -109,8 +108,6 @@
             position: relative; overflow: hidden;
         }
         .btn-universal-sbp:active { transform: scale(0.96); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
-        
-        .sbp-btn-logo { width: 30px; height: 30px; margin-right: 12px; }
 
         .spinner {
             width: 26px; height: 26px; border: 3px solid rgba(128,128,128,0.3);
@@ -130,14 +127,7 @@
         <!-- HEADER -->
         <div class="logo-container">
             <div class="sbp-logo-wrapper">
-                <svg class="sbp-main-img-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 65 L35 35 L50 50 L35 80 Z" fill="#5856D6" opacity="0.85"/>
-                    <path d="M35 35 L65 35 L50 50 L20 65 Z" fill="#007AFF" opacity="0.9"/>
-                    <path d="M50 20 L65 50 L50 50 L35 35 Z" fill="#FFCC00" opacity="0.9"/>
-                    <path d="M65 50 L80 35 L50 20 L50 50 Z" fill="#FF9500" opacity="0.85"/>
-                    <path d="M50 50 L65 50 L50 80 L35 80 Z" fill="#34C759" opacity="0.9"/>
-                    <path d="M65 50 L80 65 L50 80 L65 50 Z" fill="#4CD964" opacity="0.85"/>
-                </svg>
+                <img class="sbp-main-img-svg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAGXElEQVR4nO2dW6gcRRiGv5iIohHUEyKKJxo1UTQ5UQQVXFCMRjEqUVRUIhriEWPUBBUURBAPRDGIIioqxAMeQJQTUUFRFEU9oB7wgoLGeAEVPfBCTEQO/A/TTbJ/s7s72535n+95a2dn6+t/qqurq7uqEwghhBBCCCGEEEIIIYQQQgghhBCbE/q9AWswA1gInAXMARaZ7zpgP+A14H3gI+DrzHk1c+bV2T/s4Z+XgQvMt1/f2/Y2k4ALgO3AQeAAcAjYZ66vge+AH4BfgefN9S2w0HxP9n1Hw5BHgS1mPwa4OXP+zJzfMfuX/R0X7wBnmG8B2Bf4XF8DtwJ7++Bfg/mH2a8F3sqc2wF8ZPZTgR8z5wPmw4O+AbaZ70rgO/ONR03/XwVcYr4LgaPme70P7pWY/SxzXpE5TwO+N/vngR0z5++Aj8w+dK1fN+N54Cjg2sz5N8BzwAnmuwo4I3N/n2a8M3PeD2wx++fN/i5gh7k/T2d/NfAX8Hrm/A/gCeAMc/8aB8wFvDP7R4DXMue/AK+a/WLg8Mz9fQzj/ZnzH4AXzH428HrmfBz4wOzXAEf0/V79R/kfcBPwUeZ8DPCK2a8CjumD/y/m15nzL4AnzH4B8ETmfAJ41ewXAccM4F7xMOf8IuBRs18I3JY5n2A1a8j2s4wngKsz598Bd5t96F5Xg1E+5xy6TzXj5cz5V6tzI2B1P7QW/2bOV1ntjQY/0wfvGsz3g8w59Bw246XM+Rdgjtnb+9YwHsicH2C1n/125rwS+MF82wHP9sG7BnO9InM+xmrZ3kXmG5pQ6w78aL7tVndB08+wA7jafA9lzrcDb5tv2CqNn+iDe408/sZqN9VmdZfT7Lsz5w3AJeabZ7Vsc6PZvw48lrnPx9jHl5jz+6xuU232y5jz+8D1VrsYh5vvaLOfA2zN3OcwNmbObwA3mG+E1V1Os+/JnN8GbgR2mG+U1fLNhWZ/N/BY5v5G2DdzfgO4HrjGfLOsXn2s7z/Mvgd4BbgBOMl8x4F1wFXmu8Jqv8v7nN/2mPNn/L8U/9bI4y+sXqEwZ+O21zLnkN2x4AOrB+Lh8/tM4BLzjQE+NPs5wJ2Z+1ttbMzcn8ZqD85j7L/1t7Daq7O1/0bgVLM/ANyXub+hMTfn/AJWd9ZtZt9idR88nznPY/UnY1uDrcA1mfubA+Zkzi9jtf2Gz+5nWe3F+bN5b89zZ+b8Ilb3w+1mfyRzXslqV2O+zP2NAXMy52exuo9tM/trM+eXsdq1yPNi4LLM+Tmsls3NZv9m5ryS1b5I/qHbgO1mPxvYnTmvZLVzcbDM/TWCvZnzk1jdD7eb/W2Z8wmsdjHyrb+vM+eXsdqVaDP7WzPnl7HaMfk/c3+NYHfm/ARW98HtZn9T5nwSq12LfE/Q1zLn57HalWgz+xsz52ex2in5I3N/jWBn5nw/Vn1s28y+O3N+AKtdi2WZu+nF/sz5Oax2JdrMfmfm/ByrXZIvM/fXCHZkznuxui9uM/vdmXMXq12LPZm76cUuzPlZVuM7zH5H5vwsVvsl52XurxHsypx3YXVf3Gb2OzPnDla7Fjszd9OLnZnzBawG7jH7nZlzB6tdk10N3F+j2Jk5h+dFw/OjbWZfBwyt+yI8r2n1yH6Qcw6xQ1w1s68DhubZ2pD7awT1nEN23fOyYchz282+Dhlac52Tuxu+Zc4hdvj8rs1sH/Zfhwztg880eH+Nxu9mH8rGkEfd/0QhS+s++Njg3fQiXFfX+5D7sFq6Hza4j6E1D91hN3x/B0P2cO1bL+6B+Y6xmnWobfVfI48N19SFWs+a717gTqu52aH2/zTwF7DcXN+1mvXn/9h4uP0YrvnC/7+z8XvL/IeJkL1tL2T/w5Yv1IeXm+s5Vu8HwX3L18a/j1g9L+Y9GIfKIL/y7Z7B0z3uL+A7cw570mH79QvwubkOtYdY2K0P3jXgO/OOIay2XyE/aL6h2zDkIfPjO1av5eN9cK/E18DlVq9h8y1/wHznAAcMv4lqGvCV1XvJIfvQVbA1yD1WL/jD61H40uofM2c+b3eI1b9Z5V0d+Lz2wGqG4R6zD12B2N0P8KTV8n7b7Dsz523mHP4B0tH1R3lBCCGEEEIIIYQQQgghhBBCCCGEEELsBv4Fz/3t3hEwQYcAAAAASUVORK5CYII=" alt="СБП" style="width: 62px; height: 62px; object-fit: contain;">
                 <div class="sbp-text">
                     <span class="sbp-main-title">сбп</span>
                     <span class="sbp-subtitle">система быстрых<br>платежей</span>
@@ -159,14 +149,7 @@
 
         <!-- UNIVERSAL PAYMENT BUTTON -->
         <a href="https://qr.nspk.ru/BS1A0010CJTRDE3T81FPTQKH64V5KDI8?type=01&bank=100000000191&crc=D5BC" class="btn-universal-sbp" id="payBtn">
-            <svg class="sbp-btn-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 65 L35 35 L50 50 L35 80 Z" fill="#5856D6"/>
-                <path d="M35 35 L65 35 L50 50 L20 65 Z" fill="#007AFF"/>
-                <path d="M50 20 L65 50 L50 50 L35 35 Z" fill="#FFCC00"/>
-                <path d="M65 50 L80 35 L50 20 L50 50 Z" fill="#FF9500"/>
-                <path d="M50 50 L65 50 L50 80 L35 80 Z" fill="#34C759"/>
-                <path d="M65 50 L80 65 L50 80 L65 50 Z" fill="#4CD964"/>
-            </svg>
+            <img class="sbp-btn-logo" src="data:image/png;base64,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" alt="СБП" style="width: 30px; height: 30px; margin-right: 12px; object-fit: contain;">
             <span>Оплатить через СБП</span>
         </a>
 
