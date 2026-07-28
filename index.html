@@ -126,7 +126,7 @@
         <!-- HEADER -->
         <div class="logo-container">
             <div class="sbp-logo-wrapper">
-                <!-- صورة اللوجو الجديد -->
+‎                <!-- صورة اللوجو الجديد -->
                 <img class="sbp-main-img" src="https://i.postimg.cc/nrScS5Dg/2024-04-26-23-31-30.png" alt="СБП Logo">
                 <div class="sbp-text">
                     <span class="sbp-main-title">сбп</span>
@@ -148,8 +148,8 @@
         </div>
 
         <!-- UNIVERSAL PAYMENT BUTTON (الزرار الشامل برابط الشركة السريع) -->
-        <a href="https://qr.nspk.ru/BS1A0010CJTRDE3T81FPTQKH64V5KDI8?type=01&bank=100000000191&crc=D5BC" class="btn-universal-sbp" id="payBtn">
-            <!-- صورة اللوجو الجديد جوه الزرار -->
+        <a href="https://qr.nspk.ru/BS1A000P3JF7LV4U9T3RCIM6NGOA1O4Q" class="btn-universal-sbp" id="payBtn">
+‎            <!-- صورة اللوجو الجديد جوه الزرار -->
             <img class="sbp-btn-logo" src="https://i.postimg.cc/nrScS5Dg/2024-04-26-23-31-30.png" alt="СБП Icon">
             <span>Оплатить через СБП</span>
         </a>
@@ -179,13 +179,13 @@
             e.preventDefault();
             if (navigator.vibrate) navigator.vibrate(50);
             
-            // التأثير الشيك للتحميل عند الضغط
+‎            // التأثير الشيك للتحميل عند الضغط
             const originalContent = this.innerHTML;
             this.innerHTML = `<div class="spinner"></div>`;
             
             setTimeout(() => {
                 window.location.href = url;
-                // إرجاع الزر لشكله الطبيعي بعد ما يفتح اللينك
+‎                // إرجاع الزر لشكله الطبيعي بعد ما يفتح اللينك
                 setTimeout(() => { this.innerHTML = originalContent; }, 1000);
             }, 600);
         });
